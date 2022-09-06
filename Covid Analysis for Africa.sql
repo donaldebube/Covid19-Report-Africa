@@ -139,98 +139,98 @@ SELECT DISTINCT COUNT(total_vaccinations)
 FROM CovidVaccinations
 WHERE location = 'Nigeria'
 
---SELECT SUM(CONVERT(float,total_vaccinations))
-----SELECT date, total_vaccinations
---FROM CovidVaccinations
---WHERE location = 'Nigeria'
-----ORDER BY total_vaccinations 
+SELECT SUM(CONVERT(float,total_vaccinations))
+--SELECT date, total_vaccinations
+FROM CovidVaccinations
+WHERE location = 'Nigeria'
+--ORDER BY total_vaccinations 
 
-----SELECT date, total_vaccinations
+--SELECT date, total_vaccinations
 
-----ORDER BY total_vaccinations DESC
-
-
-----SELECT DISTINCT Location
-----FROM CovidDeaths
-----WHERE continent IS NOT NULL
---ORDER BY location
-
---SELECT *
---FROM CovidDeaths
---WHERE continent ='Africa'
---ORDER BY 3,4
-
---SELECT *
---FROM CovidVaccinations
---WHERE continent ='Africa'
---ORDER BY 3,4
-
----- Select the dataset that will be used.
---SELECT location, date, total_cases, new_cases, total_deaths, population
---FROM CovidDeaths
---ORDER BY 1,2
-
--- Top 10 countries in Africa that had the highest Population that contacted Covid
---SELECT TOP 10 location, population, MAX(total_cases) AS highest_infection_count, MAX(total_cases/population)*100 AS population_percentage
---FROM CovidDeaths
---WHERE continent = 'Africa'
---GROUP BY location, population
---ORDER BY 4 desc
-
- --SELECT DISTINCT *
- --FROM CovidDeaths
- --WHERE continent ='Africa' and location = 'Nigeria'
-
--- SELECT DEA.continent, DEA.location, DEA.date, DEA.population, VAC.new_vaccinations,
---SUM(CAST(vac.new_vaccinations AS int)) OVER (PARTITION BY DEA.location ORDER BY DEA.location, DEA.date) 
---AS rolling_people_vaccinated
---FROM CovidDeaths AS DEA
---INNER JOIN CovidVaccinations AS VAC
--- ON DEA.location = VAC.location
--- and DEA.date = VAC. date
---WHERE DEA.continent = 'Africa'
---GROUP BY DEA.continent, DEA.location, DEA.date, DEA.population, VAC.new_vaccinations
---ORDER BY 1,2,3
+--ORDER BY total_vaccinations DESC
 
 
--- To get the Percentage of People that have been Vaccinated in Africa, we have to either use a CTE or a Temp Table
+SELECT DISTINCT Location
+FROM CovidDeaths
+WHERE continent IS NOT NULL
+ORDER BY location
+
+SELECT *
+FROM CovidDeaths
+WHERE continent ='Africa'
+ORDER BY 3,4
+
+SELECT *
+FROM CovidVaccinations
+WHERE continent ='Africa'
+ORDER BY 3,4
+
+-- Select the dataset that will be used.
+SELECT location, date, total_cases, new_cases, total_deaths, population
+FROM CovidDeaths
+ORDER BY 1,2
+
+--Top 10 countries in Africa that had the highest Population that contacted Covid
+SELECT TOP 10 location, population, MAX(total_cases) AS highest_infection_count, MAX(total_cases/population)*100 AS population_percentage
+FROM CovidDeaths
+WHERE continent = 'Africa'
+GROUP BY location, population
+ORDER BY 4 desc
+
+ SELECT DISTINCT *
+ FROM CovidDeaths
+ WHERE continent ='Africa' and location = 'Nigeria'
+
+SELECT DEA.continent, DEA.location, DEA.date, DEA.population, VAC.new_vaccinations,
+SUM(CAST(vac.new_vaccinations AS int)) OVER (PARTITION BY DEA.location ORDER BY DEA.location, DEA.date) 
+AS rolling_people_vaccinated
+FROM CovidDeaths AS DEA
+INNER JOIN CovidVaccinations AS VAC
+ON DEA.location = VAC.location
+and DEA.date = VAC. date
+WHERE DEA.continent = 'Africa'
+GROUP BY DEA.continent, DEA.location, DEA.date, DEA.population, VAC.new_vaccinations
+ORDER BY 1,2,3
+
+
+--To get the Percentage of People that have been Vaccinated in Africa, we have to either use a CTE or a Temp Table
 -- With CTE 
 
---WITH PopvsVac (Continent, location, date, population, rolling_people_vaccination, new_vaccinations)
---AS
---(
---SELECT DEA.continent, DEA.location, DEA.date, DEA.population, VAC.new_vaccinations, SUM(CAST(vac.new_vaccinations AS int)) OVER (PARTITION BY DEA.location ORDER BY DEA.location, DEA.date) AS rolling_people_vaccinated
---FROM CovidDeaths AS DEA
---INNER JOIN CovidVaccinations AS VAC
+-- WITH PopvsVac (Continent, location, date, population, rolling_people_vaccination, new_vaccinations)
+-- AS
+-- (
+-- SELECT DEA.continent, DEA.location, DEA.date, DEA.population, VAC.new_vaccinations, SUM(CAST(vac.new_vaccinations AS int)) OVER (PARTITION BY DEA.location ORDER BY DEA.location, DEA.date) AS rolling_people_vaccinated
+-- FROM CovidDeaths AS DEA
+-- INNER JOIN CovidVaccinations AS VAC
 -- ON DEA.location = VAC.location
 -- and DEA.date = VAC. date
---WHERE DEA.continent = 'Africa'
-----ORDER BY 2,3
---)
---SELECT *, (rolling_people_vaccination/population)*100 AS percentage_people_vaccinated
---FROM PopvsVac
+-- WHERE DEA.continent = 'Africa'
+-- --ORDER BY 2,3
+-- )
+-- SELECT *, (rolling_people_vaccination/population)*100 AS percentage_people_vaccinated
+-- FROM PopvsVac
 
----- Looking at the Top 10 Maximum percentage of people vaccinated in Africa
----- With CTE
+-- Looking at the Top 10 Maximum percentage of people vaccinated in Africa
+-- With CTE
 
---WITH PopvsVac (Continent, location, population, rolling_people_vaccination, new_vaccinations)
---AS
---(
---SELECT DEA.continent, DEA.location, DEA.population, VAC.new_vaccinations, SUM(CAST(vac.new_vaccinations AS int)) OVER (PARTITION BY DEA.location ORDER BY DEA.location) AS rolling_people_vaccinated
---FROM CovidDeaths AS DEA
---INNER JOIN CovidVaccinations AS VAC
--- ON DEA.location = VAC.location
--- and DEA.date = VAC. date
---WHERE DEA.continent = 'Africa'
-----ORDER BY 2,3
---)
---SELECT TOP 10 *,  (rolling_people_vaccination/population)*100 AS percentage_people_vaccinated --MAX(rolling_people_vaccination/population)*100
---FROM PopvsVac
---ORDER BY percentage_people_vaccinated DESC
+WITH PopvsVac (Continent, location, population, rolling_people_vaccination, new_vaccinations)
+AS
+(
+SELECT DEA.continent, DEA.location, DEA.population, VAC.new_vaccinations, SUM(CAST(vac.new_vaccinations AS int)) OVER (PARTITION BY DEA.location ORDER BY DEA.location) AS rolling_people_vaccinated
+FROM CovidDeaths AS DEA
+INNER JOIN CovidVaccinations AS VAC
+ON DEA.location = VAC.location
+and DEA.date = VAC. date
+WHERE DEA.continent = 'Africa'
+--ORDER BY 2,3
+)
+SELECT TOP 10 *,  (rolling_people_vaccination/population)*100 AS percentage_people_vaccinated --MAX(rolling_people_vaccination/population)*100
+FROM PopvsVac
+ORDER BY percentage_people_vaccinated DESC
 
-----Looking at the top 10 countries in Africa that has the highest population
---SELECT TOP 10 location, population
---FROM CovidDeaths
---WHERE continent = 'Africa'
---GROUP BY location, population
---ORDER BY population DESC
+--Looking at the top 10 countries in Africa that has the highest population
+SELECT TOP 10 location, population
+FROM CovidDeaths
+WHERE continent = 'Africa'
+GROUP BY location, population
+ORDER BY population DESC

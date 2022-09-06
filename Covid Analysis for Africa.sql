@@ -124,20 +124,20 @@ FROM CovidDeaths
 WHERE continent = 'Africa' and new_deaths IS NOT NULL
 GROUP BY location
 
--- SELECT SUM(CONVERT(int,total_vaccinations))
--- --SELECT date, total_vaccinations
--- FROM CovidVaccinations
--- WHERE location = 'Nigeria'
--- --ORDER BY total_vaccinations 
+SELECT SUM(CONVERT(int,total_vaccinations))
+--SELECT date, total_vaccinations
+FROM CovidVaccinations
+WHERE location = 'Nigeria'
+--ORDER BY total_vaccinations 
 
 --SELECT SUM(CONVERT(float,total_vaccinations))
 SELECT DISTINCT COUNT(total_vaccinations)
 FROM CovidVaccinations
 WHERE location = 'United Kingdom' 
 
--- SELECT DISTINCT COUNT(total_vaccinations)
--- FROM CovidVaccinations
--- WHERE location = 'Nigeria'
+SELECT DISTINCT COUNT(total_vaccinations)
+FROM CovidVaccinations
+WHERE location = 'Nigeria'
 
 --SELECT SUM(CONVERT(float,total_vaccinations))
 ----SELECT date, total_vaccinations

@@ -1,2 +1,2 @@
 # Covid19-Report-Africa
-An analysis on the covid-19 dataset for African countries
+A case study to show the countries in Africa that need vaccines and other medical assistance to combat COVID-19

@@ -44,11 +44,12 @@ ORDER BY total_vaccinated DESC
 
 -- Looking at the total cases vs total death (percentage) in Africa -4
 -- Shows likelihood of dying if you contract covid in Africa
-SELECT DISTINCT location, population, SUM(CAST(new_cases AS float)) AS total_cases, SUM(CONVERT(float,new_deaths)) AS total_deaths, (SUM(CONVERT(float,new_deaths))/SUM(CAST(new_cases AS float)))*100 AS death_percentage
+SELECT DISTINCT  location, population, SUM(CAST(new_cases AS float)) AS total_cases, SUM(CONVERT(float,new_deaths)) AS total_deaths, (SUM(CONVERT(float,new_deaths))/SUM(CAST(new_cases AS float)))*100 AS death_percentage
 FROM CovidDeaths
 WHERE continent = 'Africa' and new_cases IS NOT NULL and new_deaths IS NOT NULL
 GROUP BY location, population
 ORDER BY death_percentage DESC
+
 
 -- Looking at the Total Cases vs the Population in Africa -5
 -- This shows the percentage of population that got COVID
